@@ -115,7 +115,6 @@ func SyncTransferStatus(callback func(error)) error {
 			}
 		}
 	}
-
 	return nil
 }
 

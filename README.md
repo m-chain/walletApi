@@ -42,7 +42,7 @@ __钱包api及后台管理__
 
     cd $GOPATH/src
 
-    git clone http://192.168.1.230/timeShuttle/walletApi.git
+    git clone https://github.com/m-chain/walletApi.git
 
     cd walletApi
 
