@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>商品信息</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/css/bootstrap-select.css">
+
+    <link rel="stylesheet" href="/static/css/styles/main.css">
+    <link rel="stylesheet" href="/static/css/styles/highlight.css">
+
+    <!--  IE10 viewport hack for Surface/desktop Windows 8 bug-->
+    <link href="/static/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+    <script src="/static/js/ie/html5shiv.js"></script>
+    <script src="/static/js/ie/respond.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div class="container text-center">
+
+        <div class="panel panel-default">
+            <div class="panel-heading" style="display:none;">
+                <h3 class="panel-title"></h3>
+            </div>
+            <div class="panel-body">
+                <form id="updateform" class="form-horizontal">
+                    <input type="hidden" id="domain" value="http://obd7mia1y.bkt.clouddn.com/">
+                    <input type="hidden" id="uptoken_url" value="/File/UploadToken">
+                    <input type="hidden" id="id" name="id" value="{{.goods.Id}}">
+                    <div class="form-group">
+                        <label for="cateType" class="col-sm-3 col-xs-3 control-label text-right">
+                            <font color="red">*</font>商品类别:</label>
+                        <div class="col-sm-9 col-xs-9">
+                            <select id="cateType" name="cateType" class="selectpicker form-control" data-hide-disabled="true" data-live-search="true">
+                                <optgroup disabled="disabled" label="disabled">
+                                    <option>Hidden</option>
+                                </optgroup>
+                                <option value="">-=请选择=-</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goodsName" class="col-sm-3 col-xs-3 control-label text-right">
+                            <font color="red">*</font>商品名称:</label>
+                        <div class="col-sm-9 col-xs-9">
+                            <input type="text" class="form-control" id="goodsName" name="goodsName" placeholder="请输入商品名称" value="{{.goods.GoodsName}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="brand" class="col-sm-3 col-xs-3 control-label text-right">
+                            <font color="red">*</font>品牌:</label>
+                        <div class="col-sm-9 col-xs-9">
+                            <input type="text" class="form-control" id="brand" name="brand" placeholder="请输入商品所属品牌" value="{{.goods.Brand}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="brand" class="col-sm-3 col-xs-3 control-label text-right">
+                            <font color="red">*</font>价格:</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="goodsPrice" name="goodsPrice" placeholder="请输入商品价格" value="{{.goods.GoodsPrice}}">
+                                <span class="input-group-addon">元</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goodsDesc" class="col-sm-3 col-xs-3 control-label text-right">
+                            介绍:</label>
+                        <div class="col-sm-9 col-xs-9">
+                            <textarea class="form-control" id="goodsDesc" name="goodsDesc" placeholder="请输入商品简介">{{.goods.GoodsDesc}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imgUrl" class="col-sm-3 col-xs-3 control-label text-right">
+                            图片:</label>
+                        <div class="col-sm-9 col-xs-9">
+                            <div id="container">
+                                <a class="btn btn-default btn-sm " id="pickfiles" href="#">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                    <span>选择文件</span>
+                                </a>
+                            </div>
+                            <p class="help-block">支持jpg、jpeg、png、gif格式，大小不超过4.0M</p>
+                            <div id="myCarousel" class="carousel slide" style="display:none;">
+                                <!-- 轮播（Carousel）指标 -->
+                                <ol class="carousel-indicators">
+                                </ol>
+                                <!-- 轮播（Carousel）项目 -->
+                                <div class="carousel-inner">
+                                </div>
+                                <!-- 轮播（Carousel）导航 -->
+                                <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                                <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--
+                    <div class="form-group">
+                        <div style="display:none" id="success" class="col-sm-12 col-xs-12">
+                            <div class="alert-success">
+                                队列全部文件处理完毕
+                            </div>
+                        </div>
+                    </div>-->
+
+                    <div class="form-group">
+                        <div class="col-sm-12 col-xs-12">
+                            <table class="table table-striped table-hover text-left" style="margin-top:40px;display:none">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-12">文件列表</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fsUploadProgress">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="text-right">
+                        <button id="submitBtn" type="button" style="display:none;">确定</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/bootstrap-select.js"></script>
+    <script src="/static/js/bootstrapValidator.min.js"></script>
+    <script src="/static/js/layer/layer.js"></script>
+
+    <script type="text/javascript" src="/static/js/plupload/moxie.js"></script>
+    <script type="text/javascript" src="/static/js/plupload/plupload.dev.js"></script>
+    <script type="text/javascript" src="/static/js/plupload/i18n/zh_CN.js"></script>
+    <script type="text/javascript" src="/static/js/qiniu.min.js"></script>
+    <script type="text/javascript" src="/static/js/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="/static/js/ckeditor/insertCustomImage.js"></script>
+
+    <script type="text/javascript" src="/static/js/scripts/progress_ui.js"></script>
+    <script type="text/javascript" src="/static/js/scripts/highlight.js"></script>
+    <script type="text/javascript" src="/static/js/scripts/upload.js"></script>
+    <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
+    <script type='text/javascript'>
+
+        var saveto = 'qiniu';   //储存位置为七牛云，对应于插件里的判断值
+        var qiniu_uptoken = 'xx___your_uptoken___xxx';  //七牛云服务端生成的uptoken
+        var qiniu_upload_domain = 'http://upload.qiniu.com';   //七牛云上传地址，一般无需修改，https需要修改成对应的七牛云https上传域名
+        var qiniu_bucket_domain = 'http://img.yourdomain.com';   //七牛云bucket设置的域名
+
+        var form = $('#updateform');
+        $(document).ready(function () {
+
+            form.bootstrapValidator({
+                message: '输入值不合法',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    goodsName: {
+                        validators: {
+                            notEmpty: {
+                                message: '商品名称不能为空'
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9_\. \u4e00-\u9fa5 ]+$/,
+                                message: '商品名称只能由字母、数字、点、下划线和汉字组成'
+                            }
+                        }
+                    },
+                    brand: {
+                        validators: {
+                            notEmpty: {
+                                message: '品牌不能为空'
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9_\. \u4e00-\u9fa5 ]+$/,
+                                message: '品牌名称只能由字母、数字、点、下划线和汉字组成'
+                            }
+                        }
+                    },
+                    goodsPrice: {
+                        validators: {
+                            notEmpty: { message: '商品价格不能为空' },
+                            numeric: { message: '商品价格只能是数字'},
+                            callback: {
+                                message: '商品价格小于选中金额',
+                                callback: function (value, validator) {
+                                    return true;
+                                }
+                            }
+
+                        } 
+                    }
+
+                }
+            });
+            //初始化上传
+            initImgUpload('{{.op}}');
+
+            getCateDropList();
+
+            createCkeditor("goodsDesc");
+            
+            //$('.cke_button__insertcustomimage').unbind(); 
+        });
+
+        function getCateDropList() {
+            $.ajax({
+                url: '/Category/GetCateDropList',
+                async: false,//同步，会阻塞操作
+                type: 'GET',//PUT DELETE POST
+                data: {},
+                success: function (result) {
+                    if(result.Status==0) {
+                        var arr = result.Data;
+                        var itemHtml = "";
+                        for (var i =0;i < arr.length;i++) {
+                            var item = arr[i];
+                            if(item.Depth==2) {
+                                if (itemHtml=="") {
+                                    itemHtml = '<optgroup label = "' + item.Title +'">';
+                                } else {
+                                    itemHtml += '</optgroup>';
+                                    $('#cateType').append($(itemHtml));
+                                    //console.log("****"+itemHtml)
+                                    itemHtml = '<optgroup label = "' + item.Title + '">';
+                                }
+                            } else {
+                                itemHtml += ' <option value="'+ item.Id +'">'+item.Title+'</option>';
+                                if (i==arr.length-1) {
+                                    itemHtml += '</optgroup>';
+                                    $('#cateType').append($(itemHtml));
+                                    //console.log("****" + itemHtml)
+                                }
+                            }
+                        }
+                    }
+
+                    //var str = '3,4,5,6';
+                    //var arr = str.split(',');
+                    //$('#cateType').selectpicker('val', arr);
+                    //$('.selectpicker').selectpicker('val', ['{{.goods.Cate.Id}}']);
+
+                    //在一些级联选择的使用场景中，经常需要在赋值的时候顺便触发一下组件的change事件，我们可以这么做。
+                    //$('.selectpicker').selectpicker('val', '1').trigger("change");
+                    //如果是多选的赋值，也是一样
+                    //$('.selectpicker').selectpicker('val', ['1', '2', '3']).trigger("change");
+
+                    //更新UI
+                    //$('#cateType').selectpicker('refresh');
+
+                    $('#cateType').on('loaded.bs.select', function () {
+                        $('#cateType').selectpicker('val', '{{.goods.Cate.Id}}');
+                        if ('{{.op}}' == 'view') {
+                            $('#cateType').prop('disabled', true);
+                            $('#cateType').selectpicker('refresh');
+
+                            //组件启用
+                            //$('.disable-example').prop('disabled', false);
+                            //$('.disable-example').selectpicker('refresh');
+                        }
+                    });
+                    //选中事件
+                    /*
+                    $('.selectpicker').on('changed.bs.select', function (e) {
+
+                    });*/
+                }, error: function () {
+                    top.layer.alert("网络异常，获取商品类别失败!");
+                }
+            });
+        }
+
+        //通过id创建ckeditor
+        function createCkeditor(textareaId) {
+            var editor = null;
+            if (CKEDITOR.instances[textareaId]) {
+                editor = CKEDITOR.instances[textareaId];
+                //销毁编辑器实例  
+                CKEDITOR.remove(editor);
+                //移除编辑器Jquery对象  
+                $('#cke_' + textareaId).remove();
+            }
+
+            if (CKEDITOR.instances[textareaId] == undefined) {
+                editor = CKEDITOR.replace(textareaId, {
+                    toolbar: [
+                        ['Cut', 'Copy', 'Paste'],
+                        ['Undo', 'Redo', '-', 'RemoveFormat'],
+                        ['Bold', 'Italic', 'Underline', 'Strike'],
+                        ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+                        ['Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak'],
+                        ['FontSize', 'TextColor', 'BGColor'],
+                        ['insertCustomImage'],
+                        ['Maximize', 'Source']
+                    ], height: '160px'
+                    , allowedContent: true
+                    , autoUpdateElement: true
+                });
+
+                if ('{{.op}}' == 'view') {
+                    $("#goodsDesc").attr("disabled","disabled");
+                    //$("input[type='text']").attr("readonly","readonly");
+                     $("input[type='text']").attr("disabled", "disabled");
+                     $(".help-block").hide();
+                     $("#container").hide();
+
+                     var imgUrl = '{{.goods.ImgUrl}}';
+                     if(imgUrl&&imgUrl!="") {
+                         $("#myCarousel").show();
+                         var arr = imgUrl.split(",");
+                         for (var i = 0; i < arr.length; i++) {
+                             var tempUrl = arr[i];
+                             if (tempUrl && tempUrl != "") {
+                                 if (tempUrl.indexOf("http") < 0)
+                                     tempUrl = $("#domain").val() + tempUrl;
+                                 var css = '';
+                                 if (i == 0) {
+                                     css = 'active';
+                                 }
+                                 $(".carousel-indicators").append($('<li data-target="#myCarousel" data-slide-to="' + i + '" class="' + css + '"></li>'));
+                                 $(".carousel-inner").append($('<div class="item ' + css + '"><img src="' + tempUrl + '"></div>'));
+                             }
+                         }
+                         if (arr.length <= 1) {
+                             $(".carousel-control").hide();
+                         }
+                     }
+                     
+                } else {
+                    initImgs();
+                }
+            }
+
+            //把富文本数据同步回textarea
+            /*
+            for (var instance in CKEDITOR.instances) {
+                CKEDITOR.instances[instance].updateElement();
+            }
+            CKEDITOR.config.readOnly = true;
+            */
+            CKEDITOR.on('instanceReady', function (e) { 
+                if('{{.op}}'!='view') {
+                    initCKEditorUpload(editor);
+                } else {
+                    CKEDITOR.config.readOnly = true;
+                }
+            });
+        }
+
+        function getImgUrls() {
+            var imgUrls = "";
+            var arr = $("#fsUploadProgress").children();
+            for(var i = 0;i < arr.length;i++) {
+                var obj = $(arr[i]).find("td:eq(0)");
+                var imgUrl = $(obj).attr("id");
+                if (imgUrl && imgUrl != "") {
+                    if (imgUrls != "")
+                        imgUrls += ",";
+                    imgUrls += imgUrl;
+                }
+            }
+            return imgUrls;
+        }
+
+        
+        $("#submitBtn").click(function () {
+            var cateType = $("#cateType").val();
+            if(cateType=="") {
+                layer.tips('请选择商品分类！', '.dropdown-toggle', {
+                    tips: [3, '#0FA6D8'], //设置tips方向和颜色 类型：Number/Array，默认：2 tips层的私有参数。支持上右下左四个方向，通过1-4进行方向设定。如tips: 3则表示在元素的下面出现。有时你还可能会定义一些颜色，可以设定tips: [1, '#c00']
+                    tipsMore: false, 
+                    time: 1500
+                });
+                return;
+            }
+            //进行表单验证
+            var bv = form.data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                for (var instance in CKEDITOR.instances) {
+                    CKEDITOR.instances[instance].updateElement();
+                }
+                var imgUrl = getImgUrls();
+                var data = {
+                    id: $("#id").val(),
+                    cateType:$("#cateType").val(),
+                    goodsName: $("#goodsName").val(),
+                    brand: $("#brand").val(),
+                    goodsPrice: $("#goodsPrice").val(),
+                    goodsDesc: $("#goodsDesc").val(),
+                    imgUrl: imgUrl
+                };
+                //发送ajax请求
+                $.ajax({
+                    url: '/Goods/SaveGoodsInfo',
+                    async: false,//同步，会阻塞操作
+                    type: 'POST',//PUT DELETE POST
+                    data: data,
+                    success: function (result) {
+                        if (result.Status == 0) {
+                            var index = parent.layer.getFrameIndex(window.name);
+
+                            var iframe = $(window.parent.document).find("iframe[name='iframe15']")[0];
+                            iframe.contentWindow.doSearch();
+
+                            //1：勾号 2：X号 3：？号  4：锁  5：哭脸 6：笑脸 7：！号
+                           top.layer.msg('保存成功。', { icon: 6, shade: [0.6, '#393D49'], scrollbar: false, time: 1000 });
+                           parent.layer.close(index);
+                        } else {
+                            top.layer.alert(result.Msg);
+                        }
+                    }, error: function () {
+                        top.layer.alert("网络异常，保存失败!");
+                    }
+                });
+            }
+        });
+
+        function initImgs() {
+            if ('{{.op}}' == 'edit') {
+                var imgUrl = '{{.goods.ImgUrl}}';
+                if (imgUrl && imgUrl != "") {
+                    var arr = imgUrl.split(",");
+                    for (var i = 0; i < arr.length; i++) {
+                        var tempUrl = arr[i];
+                        if (tempUrl && tempUrl != "") {
+                            var url = tempUrl;
+                            if (tempUrl.indexOf("http") < 0)
+                                url = $("#domain").val() + tempUrl;
+
+                            var tr = getTrHtml(tempUrl, url);
+                            $("#fsUploadProgress").append($(tr));
+
+                        }
+                    }
+                    if (arr.length > 0) {
+                        $("#fsUploadProgress").parent().show();
+                    }
+                }
+            }
+        }
+
+        function getTrHtml(fileName,url) {
+            var trHtml = '<tr id="'+fileName+'" class="progressContainer" style="opacity: 1;">'+
+                '<td id = "'+fileName+'" >'+
+                    '<div class="info"> '+
+                        '<div class=""> '+
+                            '<div class="imgDiv"> '+
+                                '<div class="Wrapper"> '+
+                                    '<div class="imgWrapper col-md-3"> '+
+                                        '<a class="linkWrapper" target="_blank" href="'+url+'" title="查看原图"><img src="'+url+'?imageView2/1/w/100/h/100"></a>'+
+						            '</div> '+
+                                '</div> '+
+                            '</div> '+
+                        '</div> '+
+                        '<a href="javascript:;" class="progressCancel" onclick="deleteFile(\''+fileName +'\')">×</a> '+
+                        '<div class="status text-left" style="display:none;"></div> '+
+                    '</div> '+
+	            '</td> '+
+            '  </tr>';
+            return trHtml;
+        }
+
+        function deleteFile(fileName) {
+            $.ajax({
+                url: '/Goods/DeleteFile/'+$("#id").val()+'/'+fileName,
+                async: false,//同步，会阻塞操作
+                type: 'GET',//PUT DELETE POST
+                success: function (result) {
+                    if (result.Status == 0) {
+                        $("#fsUploadProgress").find("tr[id='"+fileName+"']").remove();
+                        layer.msg('删除成功。', { icon: 6, shade: [0.6, '#393D49'], scrollbar: false, time: 1000 });
+                    } else {
+                        layer.alert(result.Msg);
+                    }
+                }, error: function () {
+                    layer.alert("网络异常，保存失败!");
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>

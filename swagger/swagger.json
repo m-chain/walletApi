@@ -1,0 +1,2626 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "wallet API",
+        "description": "钱包相关api接口",
+        "version": "1.0.0",
+        "termsOfService": "http://www.m-chain.com",
+        "contact": {
+            "email": "278985177@qq.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "basePath": "/v1",
+    "paths": {
+        "/contact/addContact": {
+            "post": {
+                "tags": [
+                    "contact"
+                ],
+                "description": "添加联系人",
+                "operationId": "ApiContactController.Create",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Contact 对象",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Contact"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JsonResult"
+                        }
+                    },
+                    "403": {
+                        "description": "address可以有多个，以逗号隔开;在添加钱包调用时，只需要传递所有钱包地址即可，其它的联系人信息可不用传递"
+                    }
+                }
+            }
+        },
+        "/contact/deleteContact": {
+            "post": {
+                "tags": [
+                    "contact"
+                ],
+                "description": "删除联系人",
+                "operationId": "ApiContactController.Delete",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "id",
+                        "description": "联系人记录ID",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "address",
+                        "description": "钱包地址，多个以逗号分隔",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JsonResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":记录ID、address不能为空"
+                    }
+                }
+            }
+        },
+        "/contact/getContactAll/{address}": {
+            "get": {
+                "tags": [
+                    "contact"
+                ],
+                "description": "查询我的所有联系人",
+                "operationId": "ApiContactController.QueryAll",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "address",
+                        "description": "钱包地址,只需传递任意一个地址",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.ContactListResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":钱包地址不能为空,只需传递任意一个地址"
+                    }
+                }
+            }
+        },
+        "/contact/getContactInfo/{id}": {
+            "get": {
+                "tags": [
+                    "contact"
+                ],
+                "description": "查询联系人详情",
+                "operationId": "ApiContactController.Query",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "联系人记录ID",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.ContactResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":记录ID不能为空"
+                    }
+                }
+            }
+        },
+        "/contact/updateContact": {
+            "post": {
+                "tags": [
+                    "contact"
+                ],
+                "description": "修改联系人",
+                "operationId": "ApiContactController.Update",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Contact 对象",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Contact"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JsonResult"
+                        }
+                    },
+                    "403": {
+                        "description": "address可以有多个，以逗号隔开"
+                    }
+                }
+            }
+        },
+        "/question/addQuestion": {
+            "post": {
+                "tags": [
+                    "question"
+                ],
+                "description": "意见反馈",
+                "operationId": "ApiQuestionController.Create",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Question 对象",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Question"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JsonResult"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/question/deleteQuestion/{id}": {
+            "get": {
+                "tags": [
+                    "question"
+                ],
+                "description": "删除反馈意见",
+                "operationId": "ApiQuestionController.Delete",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "意见记录ID",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JsonResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":记录ID不能为空"
+                    }
+                }
+            }
+        },
+        "/question/getQuestionAll": {
+            "post": {
+                "tags": [
+                    "question"
+                ],
+                "description": "查询我的反馈意见",
+                "operationId": "ApiQuestionController.QueryAll",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "address",
+                        "description": "钱包地址",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.QuestionListResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":钱包地址不能为空,如果有多个可以逗号分隔"
+                    }
+                }
+            }
+        },
+        "/question/getQuestionInfo/{id}": {
+            "get": {
+                "tags": [
+                    "question"
+                ],
+                "description": "查询反馈意见详情",
+                "operationId": "ApiQuestionController.Query",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "意见记录ID",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.QuestionResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":记录ID不能为空"
+                    }
+                }
+            }
+        },
+        "/question/updateQuestion": {
+            "post": {
+                "tags": [
+                    "question"
+                ],
+                "description": "修改意见反馈",
+                "operationId": "ApiQuestionController.Update",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Question 对象",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Question"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JsonResult"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/sign/getSignStatus/{qrCode}": {
+            "get": {
+                "tags": [
+                    "sign"
+                ],
+                "description": "查询签名是否成功",
+                "operationId": "ApiSignController.Query",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "qrCode",
+                        "description": "二维码标识",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.CCInvokeResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":二维码标识不能为空"
+                    }
+                }
+            }
+        },
+        "/sign/queryAllSignInfos": {
+            "post": {
+                "tags": [
+                    "sign"
+                ],
+                "description": "获取某地址下所有的签名记录",
+                "operationId": "ApiSignController.queryAllSignInfos",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "address",
+                        "description": "钱包地址",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "page",
+                        "description": "第几页",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "pageSize",
+                        "description": "每页多少条记录默认20",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.SignListResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/sign/queryConfirmInfo/{qrCode}": {
+            "get": {
+                "tags": [
+                    "sign"
+                ],
+                "description": "获取签名情况",
+                "operationId": "ApiSignController.queryConfirmInfo",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "qrCode",
+                        "description": "二维码标识 platsignfbc9e0bd97f348d1840843f3c9d7aaf1",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.ConfirmResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":二维码标识不能为空"
+                    }
+                }
+            }
+        },
+        "/sign/querySignInfo/{qrCode}": {
+            "get": {
+                "tags": [
+                    "sign"
+                ],
+                "description": "获取签名信息",
+                "operationId": "ApiSignController.querySignInfo",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "qrCode",
+                        "description": "二维码标识 9f9acb8f749b4f32b2e9dcab30601560",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.SignInfoResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":二维码标识不能为空"
+                    }
+                }
+            }
+        },
+        "/sign/updateSignData": {
+            "post": {
+                "tags": [
+                    "sign"
+                ],
+                "description": "设置签名数据",
+                "operationId": "ApiSignController.Update",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "qrCode",
+                        "description": "二维码",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "address",
+                        "description": "钱包地址",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "pubKey",
+                        "description": "钱包地址公钥",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "signData",
+                        "description": "已签名的数据",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.CCInvokeResult"
+                        }
+                    },
+                    "403": {
+                        "description": "只需要传递地址、公钥、签名数据、二维码标识即可"
+                    }
+                }
+            }
+        },
+        "/version/GetVersionLogs": {
+            "post": {
+                "tags": [
+                    "version"
+                ],
+                "description": "获取版本日志信息",
+                "operationId": "ApiVersionController.List",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "platType",
+                        "description": "平台类型(1、Android;2、IOS)",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "page",
+                        "description": "第几页",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "pageSize",
+                        "description": "每页多少条记录",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.VersionListResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/version/getVersionInfo/{platType}": {
+            "get": {
+                "tags": [
+                    "version"
+                ],
+                "description": "获取某平台的版本信息",
+                "operationId": "ApiVersionController.Get",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "platType",
+                        "description": "平台类型(1、Android;2、IOS)",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.VersionResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":platType不能为空"
+                    }
+                }
+            }
+        },
+        "/wallet/queryAllTokens": {
+            "get": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "获取主币信息",
+                "operationId": "WalletController.queryAllTokens",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.TokenListResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallet/queryBalance/{address}": {
+            "get": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "查询余额",
+                "operationId": "WalletController.queryBalance",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "address",
+                        "description": "钱包地址",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.WalletResp"
+                        }
+                    },
+                    "403": {
+                        "description": ":钱包地址不能为空"
+                    }
+                }
+            }
+        },
+        "/wallet/queryChargeGas": {
+            "get": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "查询手续费",
+                "operationId": "WalletController.queryChargeGas",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JsonResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallet/queryContractInfo/{address}/{version}": {
+            "get": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "查询合约的详情",
+                "operationId": "WalletController.queryContractInfo",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "address",
+                        "description": "合约地址",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "version",
+                        "description": "合约版本号",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.ContractResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":合约地址不能为空"
+                    }
+                }
+            }
+        },
+        "/wallet/queryContractList/{address}": {
+            "get": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "查询某个地址下的合约信息列表",
+                "operationId": "WalletController.queryContractList",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "address",
+                        "description": "钱包地址或合约地址",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.ContractListResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":钱包地址和合约地址必须二选其一"
+                    }
+                }
+            }
+        },
+        "/wallet/queryJpushMsgInfo/{msgId}": {
+            "get": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "获取转账交易消息详情",
+                "operationId": "WalletController.获取转账交易消息详情",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "msgId",
+                        "description": "消息记录ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JpushMsgResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":消息记录ID不能为空"
+                    }
+                }
+            }
+        },
+        "/wallet/queryJpushMsgList": {
+            "post": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "获取转账交易消息",
+                "operationId": "WalletController.获取转账交易消息",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "address",
+                        "description": "钱包地址可以有多个，以逗号分隔",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "page",
+                        "description": "第几页",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "pageSize",
+                        "description": "每页多少条记录",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JpushMsgListResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallet/queryMasterTokenInfo": {
+            "post": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "获取主币信息",
+                "operationId": "WalletController.queryMasterTokenInfo",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.TokenInfoResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallet/queryPublishCCRequireNum": {
+            "get": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "发布合约所需的平台币标准",
+                "operationId": "WalletController.发布合约所需的平台币标准",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JsonResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallet/queryPublishTokenRequireNum": {
+            "get": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "发行token所需的平台币标准",
+                "operationId": "WalletController.发行token所需的平台币标准",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JsonResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallet/queryReturnGasConfig": {
+            "get": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "手续费返还规则",
+                "operationId": "WalletController.手续费返还规则",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.ReturnGasConfigResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallet/queryReturnItemsOfWait": {
+            "post": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "待返还的明细记录",
+                "operationId": "WalletController.queryReturnItemsOfWait",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "address",
+                        "description": "钱包地址",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "tokenId",
+                        "description": "token标识或ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.ReturnListResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":钱包地址或token标识不能为空"
+                    }
+                }
+            }
+        },
+        "/wallet/queryReturnNumOfWait": {
+            "post": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "待返还的数量",
+                "operationId": "WalletController.queryReturnNumOfWait",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "address",
+                        "description": "钱包地址",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "tokenId",
+                        "description": "token标识或ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JsonResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":钱包地址或token标识不能为空"
+                    }
+                }
+            }
+        },
+        "/wallet/querySysMsgInfo/{msgId}": {
+            "get": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "获取系统消息详情",
+                "operationId": "WalletController.获取系统消息详情",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "msgId",
+                        "description": "消息记录ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.SysMsgResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":消息记录ID不能为空"
+                    }
+                }
+            }
+        },
+        "/wallet/querySysMsgList": {
+            "post": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "获取系统消息",
+                "operationId": "WalletController.获取系统消息",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "page",
+                        "description": "第几页",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "pageSize",
+                        "description": "每页多少条记录",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.SysMsgListResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallet/queryTokenInfo/{tokenId}": {
+            "get": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "获取主币信息",
+                "operationId": "WalletController.queryTokenInfo",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "tokenId",
+                        "description": "token标识或ID 79866570fea511e8a3cd2f597d577af3",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.TokenInfoResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallet/queryTransferCount/{address}": {
+            "get": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "查询余额",
+                "operationId": "WalletController.queryTransferCount",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "address",
+                        "description": "钱包地址",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JsonResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":钱包地址不能为空"
+                    }
+                }
+            }
+        },
+        "/wallet/queryTransferDetails": {
+            "post": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "获取转账交易详情",
+                "operationId": "WalletController.queryTransferDetails",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "txId",
+                        "description": "转账交易ID c4c36a80c23011e8a1d1edc8d3951e4a",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.TransResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":转账交易ID不能为空"
+                    }
+                }
+            }
+        },
+        "/wallet/queryTransferList": {
+            "post": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "综合查询交易信息",
+                "operationId": "WalletController.queryTransferList",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "address",
+                        "description": "钱包地址1 17TJQnX9ytdfMcLMLdHBpm3geBARf2Y4Vc",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "year",
+                        "description": "年份 2018",
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "startYM",
+                        "description": "开始年月 2018-09",
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "endYM",
+                        "description": "截止年月 2018-12",
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "tokenId",
+                        "description": "token标识 3e64c9d0c45f11e8b98c29d78a8d37dd",
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "page",
+                        "description": "第几页",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "pageSize",
+                        "description": "每页多少条记录",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.TransListResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallet/queryTransferListByAddress": {
+            "post": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "查询两钱包地址之间的转账交易",
+                "operationId": "WalletController.queryTransferListByAddress",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "address1",
+                        "description": "钱包地址1 17TJQnX9ytdfMcLMLdHBpm3geBARf2Y4Vc",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "address2",
+                        "description": "钱包地址2 13mK4HGj3HonJniJhsHcK8Fce4RFNXw9Ya",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "tokenId",
+                        "description": "token标识 3e64c9d0c45f11e8b98c29d78a8d37dd",
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "page",
+                        "description": "第几页",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "pageSize",
+                        "description": "每页多少条记录",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.TransListResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallet/queryTransferListByToken": {
+            "post": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "获取某一地址下某一token的转账交易记录",
+                "operationId": "WalletController.queryTransferListByToken",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "address",
+                        "description": "钱包地址 17TJQnX9ytdfMcLMLdHBpm3geBARf2Y4Vc",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "tokenId",
+                        "description": "token标识 3e64c9d0c45f11e8b98c29d78a8d37dd",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "page",
+                        "description": "第几页",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "pageSize",
+                        "description": "每页多少条记录",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.TransListResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallet/queryTransferStatistics": {
+            "post": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "查询交易统计信息",
+                "operationId": "WalletController.queryTransferStatistics",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "address",
+                        "description": "钱包地址1 17TJQnX9ytdfMcLMLdHBpm3geBARf2Y4Vc",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "year",
+                        "description": "年份 2018",
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "startYM",
+                        "description": "开始年月 2018-09",
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "endYM",
+                        "description": "截止年月 2018-12",
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "tokenId",
+                        "description": "token标识 3e64c9d0c45f11e8b98c29d78a8d37dd",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.TransStatisticsResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallet/queryVestingInfo": {
+            "post": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "获取股权信息",
+                "operationId": "WalletController.queryVestingInfo",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "address",
+                        "description": "钱包地址 13ZtotAWCHeUVY6aUF46B8D992ZUvUEfex",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "pubKey",
+                        "description": "钱包地址对应的公钥 0208f27b2189139eba610afaa7a4d48573a0db2d863651b791185eea882df06641",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "originData",
+                        "description": "签名原始数据 {\u0026quot;address\u0026quot;:\u0026quot;13ZtotAWCHeUVY6aUF46B8D992ZUvUEfex\u0026quot;,\u0026quot;pubKey\u0026quot;:\u0026quot;0208f27b2189139eba610afaa7a4d48573a0db2d863651b791185eea882df06641\u0026quot;}",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "signature",
+                        "description": "签名数据 304402200a63915578b4355926458bcb9ca69d7ecbbfb8813abedc28a629f34bc79f4f2c02201008dff2b72851ab0d749dced0f998a73524b14eb9e392f71cce9f4da5c408a9",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.VestingListResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":需要用地址对应的私钥对数据进行签名"
+                    }
+                }
+            }
+        },
+        "/wallet/sendRawTransaction": {
+            "post": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "一对一转账",
+                "operationId": "WalletController.sendRawTransaction",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "rawData",
+                        "description": "原始数据加上签名后数据的16进制格式",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JsonResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":16进制数据不能为空"
+                    }
+                }
+            }
+        },
+        "/wallet/updateWalletPubkey": {
+            "post": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "设置公钥",
+                "operationId": "WalletController.updateWalletPubkey",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "rawData",
+                        "description": "原始数据加上签名后数据的16进制格式",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JsonResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":16进制数据不能为空"
+                    }
+                }
+            }
+        },
+        "/wallet/walletIsExist/{address}": {
+            "get": {
+                "tags": [
+                    "wallet"
+                ],
+                "description": "钱包是否已经存在帐本中",
+                "operationId": "WalletController.walletIsExist",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "address",
+                        "description": "钱包地址",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/model.JsonResult"
+                        }
+                    },
+                    "403": {
+                        "description": ":钱包地址不能为空"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.CCInvokeResult": {
+            "title": "CCInvokeResult",
+            "type": "object",
+            "properties": {
+                "contractAddress": {
+                    "description": "合约地址",
+                    "type": "string"
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                },
+                "tokenId": {
+                    "description": "token标识",
+                    "type": "string"
+                },
+                "txId": {
+                    "description": "交易ID",
+                    "type": "string"
+                }
+            }
+        },
+        "model.ConfirmItem": {
+            "title": "ConfirmItem",
+            "type": "object",
+            "properties": {
+                "confirmCount": {
+                    "description": "已签名的次数",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "threshold": {
+                    "description": "需签名的次数",
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "model.ConfirmResult": {
+            "title": "ConfirmResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.ConfirmItem",
+                    "description": "签名情况"
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.Contact": {
+            "title": "Contact",
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "contactAddr": {
+                    "type": "string"
+                },
+                "createTime": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "createTimeFmt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "remark": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ContactListResult": {
+            "title": "ContactListResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "联系人列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Contact"
+                    }
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.ContactResult": {
+            "title": "ContactResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.Contact",
+                    "description": "联系人信息"
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.Contract": {
+            "title": "Contract",
+            "type": "object",
+            "properties": {
+                "ccPath": {
+                    "description": "合约路径",
+                    "type": "string"
+                },
+                "contractAddress": {
+                    "description": "合约地址",
+                    "type": "string"
+                },
+                "contractSymbol": {
+                    "description": "合约名称简写",
+                    "type": "string"
+                },
+                "createTime": {
+                    "description": "合约发布时间",
+                    "type": "string"
+                },
+                "mAddress": {
+                    "description": "钱包地址",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "合约名称",
+                    "type": "string"
+                },
+                "remark": {
+                    "description": "合约简介",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "合约状态 -1、已删除 1、待初始化 2、正在运行 3、余额不足 4、合约已禁用 5、已弃用",
+                    "type": "string"
+                },
+                "updateTime": {
+                    "description": "合约更新时间",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "版本号",
+                    "type": "string"
+                }
+            }
+        },
+        "model.ContractListResult": {
+            "title": "ContractListResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "合约列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Contract"
+                    }
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.ContractResult": {
+            "title": "ContractResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.Contract",
+                    "description": "合约信息"
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.JpushMessage": {
+            "title": "JpushMessage",
+            "type": "object",
+            "properties": {
+                "alert": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "createTime": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "createTimeFmt": {
+                    "type": "string"
+                },
+                "isRead": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "msgId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "msgType": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "target": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "txId": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.JpushMsgListResult": {
+            "title": "JpushMsgListResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "交易消息列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.JpushMessage"
+                    }
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                },
+                "total": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "model.JpushMsgResult": {
+            "title": "JpushMsgResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.JpushMessage",
+                    "description": "交易消息"
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.JsonResult": {
+            "title": "JsonResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "结果",
+                    "type": "string"
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.Question": {
+            "title": "Question",
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "当前钱包地址",
+                    "type": "string"
+                },
+                "baseUrl": {
+                    "description": "图片根url",
+                    "type": "string"
+                },
+                "createTime": {
+                    "description": "创建日期",
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "createTimeFmt": {
+                    "description": "格式化日期输出",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "邮箱",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "记录ID",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "imgName": {
+                    "description": "图片名称，文件名加后缀名",
+                    "type": "string"
+                },
+                "question": {
+                    "description": "问题描述",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "标题",
+                    "type": "string"
+                },
+                "updateTime": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "updateTimeFmt": {
+                    "description": "格式化日期输出",
+                    "type": "string"
+                }
+            }
+        },
+        "model.QuestionListResult": {
+            "title": "QuestionListResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "意见反馈列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Question"
+                    }
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.QuestionResult": {
+            "title": "QuestionResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.Question",
+                    "description": "意见反馈信息"
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.ReturnGasConfig": {
+            "title": "ReturnGasConfig",
+            "type": "object",
+            "properties": {
+                "initReleaseRatio": {
+                    "description": "立即返还比例（按百分比）",
+                    "type": "string"
+                },
+                "interval": {
+                    "description": "每次释放间隔时间以秒为单位",
+                    "type": "string"
+                },
+                "releaseRatio": {
+                    "description": "释放比例（按百分比）",
+                    "type": "string"
+                }
+            }
+        },
+        "model.ReturnGasConfigResponse": {
+            "title": "ReturnGasConfigResponse",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.ReturnGasConfig",
+                    "description": "数据信息"
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.ReturnListResult": {
+            "title": "ReturnListResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "返还记录列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.VestingItem"
+                    }
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.SignData": {
+            "title": "SignData",
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "钱包地址",
+                    "type": "string"
+                },
+                "createTime": {
+                    "description": "生成二维码日期",
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "createTimeFmt": {
+                    "description": "日期格式化输出",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "originData": {
+                    "description": "签名原始数据",
+                    "type": "string"
+                },
+                "pubKey": {
+                    "description": "公钥",
+                    "type": "string"
+                },
+                "qrCode": {
+                    "description": "二维码标识",
+                    "type": "string"
+                },
+                "respResult": {
+                    "description": "底层链调用结果",
+                    "type": "string"
+                },
+                "signData": {
+                    "description": "签名数据",
+                    "type": "string"
+                },
+                "signTime": {
+                    "description": "签名日期",
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "signTimeFmt": {
+                    "description": "日期格式化输出",
+                    "type": "string"
+                },
+                "signType": {
+                    "description": "签名类型　1、发布合约 2、实例化合约 3、升级合约 4、发行token 5、设置master、manager 6、manager签名确认 7、添加manager　8、替换manager 9 、删除manager 10、设置manager操作确认的阀值 11、设置发行token所需要的平台币 12、设置发布合约所需要的平台币 13、设置手续费返还规则",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "status": {
+                    "description": "签名状态",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "tipMsg": {
+                    "description": "提示信息",
+                    "type": "string"
+                },
+                "validTime": {
+                    "description": "有效时间戳",
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "model.SignInfoResult": {
+            "title": "SignInfoResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.SignData",
+                    "description": "签名数据"
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.SignListResult": {
+            "title": "SignListResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "签名记录",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SignData"
+                    }
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                },
+                "total": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "model.StatisticsInfo": {
+            "title": "StatisticsInfo",
+            "type": "object",
+            "properties": {
+                "inAmount": {
+                    "description": "转入",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "outAmount": {
+                    "description": "转出",
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "model.SysMessage": {
+            "title": "SysMessage",
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "createTime": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "createTimeFmt": {
+                    "type": "string"
+                },
+                "msgId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updateTime": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "updateTimeFmt": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SysMsgListResult": {
+            "title": "SysMsgListResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "系统消息列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SysMessage"
+                    }
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                },
+                "total": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "model.SysMsgResult": {
+            "title": "SysMsgResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.SysMessage",
+                    "description": "系统消息"
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.Token": {
+            "title": "Token",
+            "type": "object",
+            "properties": {
+                "decimalUnits": {
+                    "description": "最大小数点位数",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "iconUrl": {
+                    "description": "token图标",
+                    "type": "string"
+                },
+                "isBaseCoin": {
+                    "description": "是否主币",
+                    "type": "boolean"
+                },
+                "issuePrice": {
+                    "description": "发行价格",
+                    "type": "string"
+                },
+                "issueTime": {
+                    "description": "发行时间",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "token名称",
+                    "type": "string"
+                },
+                "ownerAddress": {
+                    "description": "发行token的地址",
+                    "type": "string"
+                },
+                "restNumber": {
+                    "description": "剩余数量",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "1、启用　0、禁用",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "tokenID": {
+                    "description": "token标识或ID",
+                    "type": "string"
+                },
+                "tokenSymbol": {
+                    "description": "token英文简写名称",
+                    "type": "string"
+                },
+                "totalNumber": {
+                    "description": "发行总量",
+                    "type": "string"
+                }
+            }
+        },
+        "model.TokenInfoResult": {
+            "title": "TokenInfoResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.Token",
+                    "description": "token信息"
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.TokenListResult": {
+            "title": "TokenListResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "token列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Token"
+                    }
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.TransListResult": {
+            "title": "TransListResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "交易列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Transaction"
+                    }
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                },
+                "total": {
+                    "description": "交易总数",
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "model.TransResult": {
+            "title": "TransResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.Transaction",
+                    "description": "交易信息"
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.TransStatisticsResult": {
+            "title": "TransStatisticsResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.StatisticsInfo",
+                    "description": "统计信息"
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.Transaction": {
+            "title": "Transaction",
+            "type": "object",
+            "properties": {
+                "blockId": {
+                    "type": "string"
+                },
+                "fromAddress": {
+                    "type": "string"
+                },
+                "gasUsed": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "isCost": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "msg": {
+                    "type": "string"
+                },
+                "nonce": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "number": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "toAddress": {
+                    "type": "string"
+                },
+                "tokenID": {
+                    "type": "string"
+                },
+                "tokenSymbol": {
+                    "type": "string"
+                },
+                "txHash": {
+                    "type": "string"
+                },
+                "txId": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Version": {
+            "title": "Version",
+            "type": "object",
+            "properties": {
+                "appAddr": {
+                    "description": "下载地址",
+                    "type": "string"
+                },
+                "appDesc": {
+                    "description": "app描述",
+                    "type": "string"
+                },
+                "appName": {
+                    "description": "app名称",
+                    "type": "string"
+                },
+                "createTime": {
+                    "description": "创建时间",
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "createTimeFmt": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "记录ID",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "isCurrent": {
+                    "description": "是否是当前版本 1、表示是 2、表示不是",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "platType": {
+                    "description": "平台类型 1、andorid 2、Ios",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "size": {
+                    "description": "文件大小",
+                    "type": "string"
+                },
+                "upgradeType": {
+                    "description": "升级类型　1 、强制升级 2、可忽略",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "version": {
+                    "description": "版本号",
+                    "type": "string"
+                }
+            }
+        },
+        "model.VersionListResult": {
+            "title": "VersionListResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "版本日志列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Version"
+                    }
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                },
+                "total": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "model.VersionResult": {
+            "title": "VersionResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.Version",
+                    "description": "版本信息"
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.Vesting": {
+            "title": "Vesting",
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "string"
+                },
+                "contractAddress": {
+                    "type": "string"
+                },
+                "createTime": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "initReleaseAmount": {
+                    "type": "string"
+                },
+                "interval": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "periods": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "reason": {
+                    "type": "string"
+                },
+                "startTime": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "tokenID": {
+                    "type": "string"
+                },
+                "txID": {
+                    "type": "string"
+                },
+                "vType": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "withdrawed": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.VestingItem": {
+            "title": "VestingItem",
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "description": "总量",
+                    "type": "string"
+                },
+                "createTime": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "effectTime": {
+                    "description": "生效时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "记录ID",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "initReleaseAmount": {
+                    "description": "立即释放数量",
+                    "type": "string"
+                },
+                "interval": {
+                    "description": "每次释放时间间隔",
+                    "type": "string"
+                },
+                "periodNum": {
+                    "description": "每期返还的数量",
+                    "type": "string"
+                },
+                "periods": {
+                    "description": "总期数",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "status": {
+                    "description": "状态 返还中、待返还",
+                    "type": "string"
+                },
+                "tokenID": {
+                    "description": "TOKEN标识",
+                    "type": "string"
+                },
+                "vType": {
+                    "description": "类型 0:预售股权 1:实例化合约 2:升级合约 3:合约调用 4:发行token",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "vTypeName": {
+                    "description": "类型名称",
+                    "type": "string"
+                },
+                "withdrawed": {
+                    "description": "已划入余额的数量",
+                    "type": "string"
+                }
+            }
+        },
+        "model.VestingListResult": {
+            "title": "VestingListResult",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "股权信息列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Vesting"
+                    }
+                },
+                "msg": {
+                    "description": "status为false时的错误信息",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "true 表示成功；false 表示失败",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.Wallet": {
+            "title": "Wallet",
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "createTime": {
+                    "type": "string"
+                },
+                "isLocked": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "pubKey": {
+                    "type": "string"
+                },
+                "walletRests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.WalletRest"
+                    }
+                }
+            }
+        },
+        "model.WalletResp": {
+            "title": "WalletResp",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.Wallet"
+                },
+                "msg": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.WalletRest": {
+            "title": "WalletRest",
+            "type": "object",
+            "properties": {
+                "freezeNumber": {
+                    "description": "冻结的额度",
+                    "type": "string"
+                },
+                "isBaseCoin": {
+                    "description": "是否是平台币",
+                    "type": "boolean"
+                },
+                "name": {
+                    "description": "token名称",
+                    "type": "string"
+                },
+                "restNumber": {
+                    "description": "余额",
+                    "type": "string"
+                },
+                "tokenID": {
+                    "description": "token标识",
+                    "type": "string"
+                },
+                "tokenSymbol": {
+                    "description": "token英文简写名称",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "version",
+            "description": "有关应用版本的相关操作\n"
+        },
+        {
+            "name": "question",
+            "description": "意见反馈相关操作\n"
+        },
+        {
+            "name": "contact",
+            "description": "联系人相关操作\n"
+        },
+        {
+            "name": "sign",
+            "description": "签名相关操作\n"
+        },
+        {
+            "name": "wallet",
+            "description": "钱包相关操作\n"
+        }
+    ]
+}

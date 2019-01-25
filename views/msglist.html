@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>系统通知列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/jquery.bootgrid.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/app.css" type="text/css">
+     
+    <!--  IE10 viewport hack for Surface/desktop Windows 8 bug-->
+    <link href="/static/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+    <script src="/static/js/ie/html5shiv.js"></script>
+    <script src="/static/js/ie/respond.js"></script>
+    <![endif]-->
+
+    <style>
+        #grid>tbody td.text-center,#grid>tbody td.select-cell {
+            line-height: 30px;
+        }
+        /*给table添加滚动条 开始*/
+        .scrollContainer {
+            overflow-x: auto;
+        }
+
+        /*.scrollContainer table{width:1200px;table-layout:fixed}*/
+
+        .scrollContainer table tbody td{
+            white-space:normal;
+            word-break:break-all;
+            overflow: hidden;
+        }
+        /*给table添加滚动条 结束*/
+    </style>
+    
+</head>
+
+<body>
+    <div id="container" style="height: 100%; overflow-y: auto; overflow-x: hidden;">
+        <section class="panel panel-default">
+            <header class="panel-heading" style="display:none;">消息列表</header>
+            <form class="form-horizontal" style="margin-top:10px;">
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <div class="search input-group m-b">
+                            <input type="text" id="keyWord" name="keyWord" class="search-field form-control" placeholder="请输入关键字进行搜索">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-icon" onclick="doSearch()">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-2">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-sm btn-primary" onclick="addMsg()">
+                                <i class="glyphicon glyphicon-plus"></i>添加消息
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 scrollContainer">
+                    <table id="grid" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th data-width="20%" data-header-align="center" data-align="center" data-column-id="msgId" data-identifier="true" data-type="number" data-formatter="msgId">标题</th>
+                                <th data-width="30%" data-header-align="center" data-align="center" data-column-id="content">内容</th>
+                                <th data-width="15%" data-header-align="center" data-align="center" data-column-id="createTimeFmt">创建时间</th>
+                                <th data-width="15%" data-header-align="center" data-align="center" data-column-id="updateTimeFmt">更新时间</th>
+                                <th data-width="20%" data-header-align="center" data-align="center" data-column-id="commands" data-formatter="commands" data-sortable="false">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    
+                        </tbody>
+                    </table>
+
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+
+<script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.placeholder.js"></script>
+<script type="text/javascript" src="/static/js/jquery.bootgrid.js"></script>
+    <script>
+
+        $(function () {
+            $('input, textarea').placeholder();
+            loadData();
+        });
+        function loadData() {
+                var data = [];//选重行的数据，需要设置selection、multiSelect属性为true
+                var layerIndex = top.layer.msg('正在加载中，请耐心等待....', { icon: 16, shade: [0.6, '#393D49'], scrollbar: false, time: 20000 });
+                var grid = $("#grid").bootgrid({
+                    pagination: 3,
+                    url: "/Message/List",
+                    ajax: true,
+                    selection: false,
+                    rownumbers: true,
+                    multiSelect: false,
+                    formatters: {
+                        "msgId": function (column, row) {
+                            return row.title;
+                        },
+                        "commands": function (column, row) {
+                            var opHtml = "<button type=\"button\" class=\"btn btn-xs btn-primary\" onclick=\"editMsg(" + row.msgId + ")\">修改</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-xs btn-danger\" onclick=\"delMsg(" + row.msgId + ")\">删除</button>";
+                            return opHtml;
+                        }
+                    }
+                }).on("loaded.rs.jquery.bootgrid", function (e) {
+                    // Resets the selected data array on reload, searching, sorting or changing page
+                    data = [];
+                    top.layer.close(layerIndex);
+                });
+            }
+
+        function doSearch() {
+            var url = '/Message/List/?keyWord=' + $("#keyWord").val()+"&rand="+Math.random();
+
+            $("#grid").bootgrid("setUrl", url);
+            $("#grid").bootgrid("reload");
+        }
+        function addMsg() {
+            top.layer.open({
+                type: 2,
+                title: '添加消息',
+                shadeClose: true,
+                shade: 0.5,
+                area: ['44%', '50%'],
+                content: '/Message/InitAdd', //iframe的url
+                btn: ['确定', '取消'],
+                btn1: function (index, layero) {
+                    var btnObjs = top.layer.getChildFrame('#submitBtn', index);
+                    var _index = index;
+                    $(btnObjs[0]).click();
+                }
+            });
+        }
+        function editMsg(id) {
+            top.layer.open({
+                type: 2,
+                title: '修改消息',
+                shadeClose: true,
+                shade: 0.5,
+                area: ['44%', '50%'],
+                content: '/Message/InitAdd?id=' + id, //iframe的url get request
+                btn: ['确定', '取消'],
+                btn1: function (index, layero) {
+                    var btnObjs = top.layer.getChildFrame('#submitBtn', index);
+                    var _index = index;
+                    $(btnObjs[0]).click();
+                }
+            });
+        }
+        function delMsg(id) {
+            var tips ="确定删除?";
+            top.layer.confirm(tips, {
+                btn: ['确定', '取消'] //按钮
+            }, function (_index) {
+                $.ajax({
+                    url: '/Message/DeleteMessage/'+id,
+                    async: false,//同步，会阻塞操作
+                    type: 'GET',//PUT DELETE POST
+                    success: function (result) {
+                        if (result.Status == 0) {
+                            doSearch();
+                            top.layer.close(_index);
+                            top.layer.msg('删除成功。', { icon: 6, shade: [0.6, '#393D49'], scrollbar: false, time: 1000 });
+                        } else {
+                            top.layer.alert(result.Msg);
+                        }
+                    }, error: function () {
+                        top.layer.alert("网络异常，删除失败!");
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>

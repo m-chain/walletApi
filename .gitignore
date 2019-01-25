@@ -1,0 +1,17 @@
+coverage
+docs/gen
+node_modules/*
+npm-shrinkwrap.json
+package-lock.json
+npm-debug.log
+tmp
+.project
+.DS_Store
+*.csv
+*.heapsnapshot
+.vscode
+.idea
+test/typescript/**/*.js
+test/typescript/**/*.js.map
+*.tmp
+

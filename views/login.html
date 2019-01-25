@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>钱包后台</title>
+  <link rel="shortcut icon" href="/static/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+
+  <!-- bootstrap & fontawesome -->
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/static/css/animated.min.css" rel="stylesheet">
+  <link href="/static/css/style.min.css" rel="stylesheet">
+  <link href="/static/css/login.min.css" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+  <!--[if lte IE 8]>
+  <script src="/static/js/ie/html5shiv.js"></script>
+  <script src="/static/js/ie/respond.js"></script>
+  <script src="/static/js/ie/excanvas.js"></script>
+  <![endif]-->
+
+  <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+</head>
+
+<body class="signin">
+  <div class="" style="left: 0px; top: 0px; visibility: hidden; position: absolute;">
+    <table class="ui_border">
+      <tbody>
+        <tr>
+          <td class="ui_lt"></td>
+          <td class="ui_t"></td>
+          <td class="ui_rt"></td>
+        </tr>
+        <tr>
+          <td class="ui_l"></td>
+          <td class="ui_c">
+            <div class="ui_inner">
+              <table class="ui_dialog">
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <div class="ui_title_bar">
+                        <div class="ui_title" unselectable="on" style="cursor: move;"></div>
+                        <div class="ui_title_buttons">
+                          <a class="ui_min" href="javascript:void(0);" title="最小化" style="display: inline-block;">
+                            <b class="ui_min_b"></b>
+                          </a>
+                          <a class="ui_max" href="javascript:void(0);" title="最大化" style="display: inline-block;">
+                            <b class="ui_max_b"></b>
+                          </a>
+                          <a class="ui_res" href="javascript:void(0);" title="还原">
+                            <b class="ui_res_b"></b>
+                            <b class="ui_res_t"></b>
+                          </a>
+                          <a class="ui_close" href="javascript:void(0);" title="关闭(esc键)" style="display: inline-block;">×</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="ui_icon" style="display: none;"></td>
+                    <td class="ui_main" style="width: auto; height: auto;">
+                      <div class="ui_content" style="padding: 10px;"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <div class="ui_buttons" style="display: none;"></div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </td>
+          <td class="ui_r"></td>
+        </tr>
+        <tr>
+          <td class="ui_lb"></td>
+          <td class="ui_b"></td>
+          <td class="ui_rb" style="cursor: se-resize;"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="signinpanel">
+    <div class="col-sm-6">
+      <form method="post">
+        <img src="/static/img/logo.png" style="width: 100%;height:50%;">
+        <input type="text" id="userName" autocomplete="off" name="userName" class="form-control uname" style="background-color:#ffffff"
+          value="admin" placeholder="请输入登录帐号">
+        <input type="password" autocomplete="off" id="password" name="password" class="form-control pword m-b" value="122003" placeholder="密码">
+        <div class="input-group">
+          <input type="text" class="form-control sure" style="width:172px;" name="randCode" placeholder="请输入验证码" id="randCode">
+          <img style=" opacity: 0.7;margin-top:15px;margin-left:5px;" id="randCodeImage" src="/captcha/{{.CaptchaId}}.png" onclick="reload()">
+          <input type=hidden id="captchaId" name="captchaId" value="{{.CaptchaId}}">
+        </div>
+
+        <div class="clearfix">
+          <!--
+          <label class="inline" style="margin-top:10px;">
+            <input type="checkbox" class="ace" id="on_off" name="remember">
+            <span class="lbl">记住密码</span>
+          </label>-->
+          <button type="button" id="but_login" onclick="checkUser()" class="btn btn-primary block full-width m-b">
+            <i class="ace-icon fa fa-key"></i>
+            <span class="bigger-110">登录</span>
+          </button>
+        </div>
+        <!--
+        <div class="toolbar clearfix">
+          <div style="float: right">
+            <p class="text-muted text-left">
+              <a href="javascript:void(0);" onclick="initRegInfo();return false;">
+                <small style="color:rgba(12, 12, 12, 0.95);margin-left: opx;">注册用户</small>
+              </a>|
+              <a href="javascript:void(0);" onclick="findPwd();return false;">
+                <small style="color:rgba(12, 12, 12, 0.95);">忘记密码</small>
+              </a>
+            </p>
+          </div>
+        </div>-->
+      </form>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="/static/js/layer/layer.js"></script>
+  <script type="text/javascript">
+    //输入验证码，回车登录
+    $(document).keydown(function (e) {
+      if (e.keyCode == 13) {
+        $("#but_login").click();
+      }
+    });
+
+    //验证用户信息
+    function checkUser() {
+      if (!validForm()) {
+        return false;
+      }
+      newLogin();
+    }
+    //表单验证
+    function validForm() {
+      if ($.trim($("#userName").val()).length == 0) {
+        layer.msg('请输入手机号!', { icon: 5, shade: [0.6, '#393D49'], scrollbar: false, time: 1500 });
+        //layer.alert('请输入用户名!', {icon: 5, title:'提示'});//2
+        return false;
+      }
+
+      if ($.trim($("#password").val()).length == 0) {
+        layer.msg('请输入密码!', { icon: 5, shade: [0.6, '#393D49'], scrollbar: false, time: 1500 });
+        //layer.alert('请输入密码!', {icon: 5, title:'提示'});//2
+        $("#password").focus();
+        return false;
+      }
+      if ($.trim($("#randCode").val()).length == 0) {
+        layer.msg('请输入验证码!', { icon: 5, shade: [0.6, '#393D49'], scrollbar: false, time: 1500 });
+        //layer.alert('请输入验证码!', {icon: 5, title:'提示'});//2
+        return false;
+      }
+      return true;
+    }
+
+    //登录处理函数
+    function newLogin() {
+      $.ajax({
+        type: 'post',
+        url: '/Home/Login',
+        data: {
+          "name": $("#userName").val(),
+          "pwd": $("#password").val(),
+          "captchaId":$("#captchaId").val(),
+          "captcha": $("#randCode").val()
+        },
+        success: function (result) {
+          if (result.islogin == 0) {
+            window.location.href = "/";
+          } else if (result.islogin == 1) {
+             layer.msg('用户名或密码错误!', { icon: 5, shade: [0.6, '#393D49'], scrollbar: false, time: 1000 });
+          } else if (result.islogin == 2) {
+            layer.msg('用户名或密码错误!', { icon: 5, shade: [0.6, '#393D49'], scrollbar: false, time: 1000 });
+          } else if (result.islogin == 3) {
+            //reload();
+            layer.msg('验证码错误!', { icon: 5, shade: [0.6, '#393D49'], scrollbar: false, time: 1000 });
+          }
+        }
+      })
+    }
+
+
+  function setSrcQuery(e, q) {
+    var src = e.src;
+    var p = src.indexOf('?');
+    if (p >= 0) {
+      src = src.substr(0, p);
+    }
+    e.src = src + "?" + q
+  }
+
+ function reload() {
+    setSrcQuery(document.getElementById('randCodeImage'), "reload=" + (new Date()).getTime());
+    return false;
+  }
+
+  function initRegInfo() {
+    layer.open({
+      type: 2,
+      title: '用户注册',
+      shadeClose: true,
+      shade: 0.5,
+      area: ['44%', '70%'],
+      content: '/Home/InitReg', //iframe的url
+      btn: ['确定', '取消'],
+      btn1: function (index, layero) {
+        var btnObjs = layer.getChildFrame('#submitBtn', index);
+        var _index = index;
+        $(btnObjs[0]).click();
+      }
+    });
+  }
+
+  function findPwd() {
+     layer.open({
+      type: 2,
+      title: '忘记密码',
+      shadeClose: true,
+      shade: 0.5,
+      area: ['44%', '70%'],
+      content: '/Home/InitPass', //iframe的url
+      btn: ['确定', '取消'],
+      btn1: function (index, layero) {
+        var btnObjs = layer.getChildFrame('#submitBtn', index);
+        var _index = index;
+        $(btnObjs[0]).click();
+      }
+    });
+  }
+
+  function toHome() {
+    window.location.href = "/";
+  }
+  </script>
+</body>
+
+</html>
